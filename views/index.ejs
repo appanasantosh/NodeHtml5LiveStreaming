@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+     <script src="http://jquery-json.googlecode.com/files/jquery.json-2.2.min.js"></script>
+     
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+     <script src="/socket.io/socket.io.js"></script>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+      //var wsh = new ActiveXObject(wscript.network)
+    	var source = new EventSource('/events');
+      var messagereceived ="";
+      var blink = true;
+    	source.onmessage = function(e)
+    	{
+    		
+    		var content = $('#messages');
+        var details = JSON.parse(e.data);
+        
+        // if(details.receiver == localStorage.username)
+        // {
+            messagereceived = details.msg;
+            //var datetime =  newDate.today() + " @ " + newDate.timeNow();
+        
+
+    		
+    		    content.append("<p>"+details.msg+"</p></br>");
+            //blinkTitle(e.data,"Notification",500,true);
+        // }
+
+    	}
+      var myInterval;
+      $(document).ready(function(){
+        // if($('#ele').length == 0)
+        // {
+        //   alert("Element doesn't exists..");
+        // }
+         window.onblur =function(){
+        //alert("Blur");
+        myInterval = setInterval(function()
+          {
+            if(blink == true)
+            {
+              document.title = "Message !!!!!";
+              blink = false;
+            }
+            else
+            {
+              document.title = "";
+              blink = true;
+            }
+          },1000)
+        //document.title= messagereceived;
+        }
+
+        window.onfocus = function(){
+          clearInterval(myInterval);
+          document.title = "Express";
+        }
+
+
+
+        var socket = io();
+        var canvas = document.getElementById("preview");
+        var context = canvas.getContext("2d");
+        var testcan = document.getElementById("test");
+        var textcontest = testcan.getContext("2d");
+        canvas.width = 400;
+        canvas.height = 300;
+        context.height = canvas.height;
+        context.width = canvas.width;
+        testcan.width = 600;
+        testcan.height = 500;
+        textcontest.width = testcan.width;
+        textcontest.height = testcan.height;
+        var video = document.getElementById("video"); 
+        //var output = document.getElementById("out");
+        
+
+        function logger(msg)
+        {
+          $('#logger').text(msg);
+        }
+
+        function loadCam(stream)
+        {
+          video.src = window.URL.createObjectURL(stream);
+          
+        }
+
+        function loadFail()
+        {
+          logger("Camera is not connected.");
+        }
+
+        function viewVideo(video,context)
+        {
+          context.drawImage(video,0,0,context.width,context.height);
+          
+          
+         
+        }
+       
+
+        $(function(){
+          navigator.getUserMedia = (navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia)
+          if(navigator.getUserMedia)
+          {
+            navigator.getUserMedia({video:true},loadCam,loadFail);
+          }
+          setInterval(function(){
+
+            viewVideo(video,context);
+            var img = canvas.toDataURL();
+            //output.scr = img;
+            //testcan.drawImage(img,0,0,textcontest.width,textcontest.height);
+            socket.emit('stream',canvas.toDataURL('image/png'));
+          },100)
+        });
+var image = new Image();
+        socket.on('stream',function(img)
+        {
+          
+          //output.src = img;
+          //textcontest.drawImage(img,0,0,textcontest.width,textcontest.height);
+          //alert('event fired');
+          
+          image.src = img;
+          image.onload = function(){
+              //alert('Image Loaded');
+             textcontest.drawImage(image,0,0,textcontest.width,textcontest.height);
+          }
+        });
+      });
+     
+
+    	// function stop()
+    	// {
+    	// 	alert("Before close... "+source.readyState);
+    	// 	source.close();
+    	// 	alert("After close... "+source.readyState);
+    	// }
+      function send()
+      {
+        
+        $.ajax({type:'Post',url:'/send',dataType:'text',data:{message:$('#messagetext').val(),user: "harika"},success:function(responce){
+          
+          $('#messages').append("<p>"+$('#messages').val()+"</p></br>");
+        
+          $('#messagetext').val("");
+
+
+          
+      },
+    error:function(err){
+      //alert('error');
+    }});
+  
+      }
+
+      function localstr(){
+       
+        localStorage.username = $("#name").val();
+      }
+
+    	
+    </script>
+  </head>
+  <body style="background-image:url('/images/Elegant_Background-7.jpg');background-size:cover">
+  	<h1 align="center" style="font-family:calibri; font-weight:bold" >SSE Chat</h1></br>
+    <!-- <div id="message" style="font-size:25px" align="center"></div>
+    <button class="btn btn-large btn-primary" id="stop" onclick="stop()">Stop SSE</button> -->
+   
+  </br>
+<div class="row">
+  <div class="col-sm-8">
+    <div id="messages" style="width :500px; height:400px; border-style:solid;border-width:1px; border-color:black; overflow:scroll; float:left;margin-bottom:10px"></div>
+     <div >
+      <label class="control-label col-sm-3" style="text-overflow: ellipsis;width:80px;height:20px; overflow:hidden;white-space:nowrap">Name of the login user:</label>
+      
+   <input type="text" class="form-control " id="name" style="width:200px" onfocusout="localstr()" > 
+       
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <canvas id="test"></canvas>
+  </div>
+   </div>
+    <!-- <form role="form" action="/send"  method="post"> -->
+    <div >
+    	<div class="form-group" style="clear:left">
+    		<textarea id="messagetext" class="form-control" name="message" style="resize:none "></textarea>
+		</div>
+		<button class="btn btn-large btn-primary" onclick="send()">Send</button>
+  </div>
+ 
+    <!-- </form> -->
+    <video src="" id="video" style="width:200px; height:150px" autoplay="true"></video>
+
+    <canvas id="preview"></canvas>
+    <div id="logger"></div>
+    
+    <!-- <img src="" id="out" style="height:200px;width:200px"> -->
+  </body>
+</html>
