@@ -19,15 +19,16 @@
     .oth {background-color: #CEFBFC}
     .mne {background-color: #E9FCF4}
 
-    @keyframes head {0% {color: #FFFF99;}
-                    25% {color: #E8FF99;}
-                    50%{color:  #E0F0B8;}
-                    100%{color: #99DEDB;}}
+    @keyframes head {0%,100% {color: white;transform:translate(0,0);}
+                    50%{color: #c1f0f0;transform:translate(150px,0);}
+                  }
 
     .liveheading {
       animation-name:head;
       animation-duration:6s;
       animation-iteration-count:infinite;
+      animation-direction: alternate;
+      animation-timing-function: linear;
     }                
     </style>
     <script type="text/javascript">
@@ -207,23 +208,23 @@ var image = new Image();
     <button class="btn btn-large btn-primary" id="stop" onclick="stop()">Stop SSE</button> -->
    
   </br>
-      <div style="margin-bottom:2%">
-          <label class="control-label col-sm-3 username" style="text-overflow: ellipsis;width:80px;height:20px; overflow:hidden;white-space:nowrap; color: white" data-toggle="tooltip" title="User Name">User :</label>
-          <input type="text" class="form-control " id="name" style="width:200px" onfocusout="localstr()" > 
+      <div style="margin-bottom:2%; ">
+          <label class="control-label username" style="text-overflow: ellipsis;width:30%;max-width:100%;height:20px; overflow:hidden;white-space:nowrap; color: white" data-toggle="tooltip" title="User Name">User :</label>
+          <input type="text" class="form-control " id="name" style="width:30%; max-witdth:100%" onfocusout="localstr()" > 
            
       </div>
       <div class="row" style="margin-bottom:2%;">
         
-        <div  id="messages" style="float:left;max-width :60%;width:60%;margin:10px; height:360px; overflow:scroll; float:left;background-image:url('/images/fly.png'); background-size:100% ; font-family:calibri; padding-top:5px"></div>
+        <div  id="messages" style="float:left;max-width :100%;width:60%;margin:10px; height:360px; overflow:scroll; float:left;background-image:url('/images/fly.png'); background-size:100% ; font-family:calibri; padding-top:5px"></div>
        
-        <div style="float:left; margin:10px; max-width:60%;height:100%;border:3px solid white">
+        <div style="float:left; margin:10px; max-width:100%;height:100%;border:3px solid white">
           <canvas id="test" ></canvas>
         </div>
       </div>
     <!-- <form role="form" action="/send"  method="post"> -->
       <div >
         	<div class="form-group messagediv" style="clear:left">
-        		<textarea id="messagetext" class="form-control" name="message" style="resize:none;max-width:60% "></textarea>
+        		<textarea id="messagetext" class="form-control" name="message" style="resize:none;max-width:100% "></textarea>
     		  </div>
     		  <button class="btn btn-large btn-primary" onclick="send()">Send</button>
       </div>
