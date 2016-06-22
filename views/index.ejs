@@ -2,6 +2,8 @@
 <html>
   <head>
     <title><%= title %></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -17,7 +19,16 @@
     .oth {background-color: #CEFBFC}
     .mne {background-color: #E9FCF4}
 
-  
+    @keyframes head {0% {color: #FFFF99;}
+                    25% {color: #E8FF99;}
+                    50%{color:  #E0F0B8;}
+                    100%{color: #99DEDB;}}
+
+    .liveheading {
+      animation-name:head;
+      animation-duration:6s;
+      animation-iteration-count:infinite;
+    }                
     </style>
     <script type="text/javascript">
       //var wsh = new ActiveXObject(wscript.network)
@@ -47,7 +58,7 @@
     	}
       var myInterval;
       $(document).ready(function(){
-
+        
         
         // if($('#ele').length == 0)
         // {
@@ -190,39 +201,39 @@ var image = new Image();
     </script>
   </head>
   <body style="background-image:url('/images/Yellow.jpg');background-size:cover">
-  	<h1 align="center" style="font-family:calibri; font-weight:bold;color:white" >Live Streaming......</h1></br>
+    <div class="container">
+  	<h1 class="liveheading" align="center" style="font-family:calibri; font-weight:bold;color:white;" >Live Streaming....</h1></br>
     <!-- <div id="message" style="font-size:25px" align="center"></div>
     <button class="btn btn-large btn-primary" id="stop" onclick="stop()">Stop SSE</button> -->
    
   </br>
-<div class="row" style="margin-bottom:10px">
-  <div class="col-sm-8">
-    <div id="messages" style="width :500px; height:400px; overflow:scroll; float:left;background-image:url('/images/fly.png'); background-size:cover ; font-family:calibri; padding-top:5px"></div>
-     <div >
-      <label class="control-label col-sm-3 username" style="text-overflow: ellipsis;width:80px;height:20px; overflow:hidden;white-space:nowrap; color: white" data-toggle="tooltip" title="User Name">User :</label>
-      
-   <input type="text" class="form-control " id="name" style="width:200px" onfocusout="localstr()" > 
+      <div style="margin-bottom:2%">
+          <label class="control-label col-sm-3 username" style="text-overflow: ellipsis;width:80px;height:20px; overflow:hidden;white-space:nowrap; color: white" data-toggle="tooltip" title="User Name">User :</label>
+          <input type="text" class="form-control " id="name" style="width:200px" onfocusout="localstr()" > 
+           
+      </div>
+      <div class="row" style="margin-bottom:2%;">
+        
+        <div  id="messages" style="float:left;max-width :60%;width:60%;margin:10px; height:360px; overflow:scroll; float:left;background-image:url('/images/fly.png'); background-size:100% ; font-family:calibri; padding-top:5px"></div>
        
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <canvas id="test"></canvas>
-  </div>
-   </div>
+        <div style="float:left; margin:10px; max-width:60%;height:100%;border:3px solid white">
+          <canvas id="test" ></canvas>
+        </div>
+      </div>
     <!-- <form role="form" action="/send"  method="post"> -->
-    <div >
-    	<div class="form-group messagediv" style="clear:left">
-    		<textarea id="messagetext" class="form-control" name="message" style="resize:none "></textarea>
-		</div>
-		<button class="btn btn-large btn-primary" onclick="send()">Send</button>
-  </div>
+      <div >
+        	<div class="form-group messagediv" style="clear:left">
+        		<textarea id="messagetext" class="form-control" name="message" style="resize:none;max-width:60% "></textarea>
+    		  </div>
+    		  <button class="btn btn-large btn-primary" onclick="send()">Send</button>
+      </div>
  
     <!-- </form> -->
-    <video src="" id="video" style="width:200px; height:150px" autoplay="true"></video>
+    <video src="" id="video" style="width:30%; height:100%" autoplay="true"></video>
 
     <canvas id="preview"></canvas>
     <div id="logger"></div>
-    
+    </div>
     <!-- <img src="" id="out" style="height:200px;width:200px"> -->
   </body>
 </html>
